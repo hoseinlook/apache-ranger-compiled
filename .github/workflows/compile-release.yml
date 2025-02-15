@@ -53,18 +53,8 @@ jobs:
       - name: Download Apache Ranger ${{ matrix.version }}
         id: download-ranger 
         run: |
-          wget -nv "https://archive.apache.org/dist/ranger/${{ matrix.version }}/apache-ranger-${{ matrix.version }}.tar.gz" -O "apache-ranger.tar.gz"
-          wget -nv "https://archive.apache.org/dist/ranger/${{ matrix.version }}/apache-ranger-${{ matrix.version }}.tar.gz.asc" -O "apache-ranger.tar.gz.asc"
-          wget -nv "https://archive.apache.org/dist/ranger/KEYS" -O "ranger-KEYS"
-          gpg --import ranger-KEYS
-          gpg --verify apache-ranger.tar.gz.asc apache-ranger.tar.gz
-          if [[ "${{ matrix.version }}" == "2.2.0" ]]; then 
-            mkdir apache-ranger-${{ matrix.version }}
-            tar zxf apache-ranger.tar.gz -C apache-ranger-${{ matrix.version }}
-          else 
-            tar zxf apache-ranger.tar.gz
-          fi
-          cd apache-ranger-${{ matrix.version }}
+          git clone https://github.com/apache/ranger.git
+          cd ranger
           java_version=$(cat pom.xml | grep -Eo "<java.version.required>.*</java.version.required>" | sed "s/<java.version.required>//g" | sed "s </java.version.required>  g")
           if [[ "$java_version" == "1.8" ]]; then
             java_version=8.0.345+1
