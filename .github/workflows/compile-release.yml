@@ -33,7 +33,7 @@ jobs:
         id: discover-releases
         run: |
           compiled=$(cat ./apache-ranger-compiled/compiled)
-          versions=$((git --git-dir ./ranger/.git branch | grep master | grep -v "${compiled}") || echo "none")
+          versions=$( echo "master" || echo "none")
           if [[ "${versions}" == "none" ]]; then
             matrix="none"
           else
