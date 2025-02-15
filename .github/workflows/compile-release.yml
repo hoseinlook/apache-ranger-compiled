@@ -72,7 +72,7 @@ jobs:
 
       - name: Build Apache Ranger ${{ matrix.version }}
         run: |
-          cd apache-ranger-${{ matrix.version }}
+          cd ranger
           if dpkg --compare-versions "${{ matrix.version }}" "lt" "2.1.0"; then
             mvn clean compile package assembly:assembly -DskipTests
           else
@@ -92,7 +92,7 @@ jobs:
         
       - name: Publish Apache Ranger ${{ matrix.version }}
         run: |
-          cd apache-ranger-${{ matrix.version }}/target
+          cd ranger/target
           for asset in *.{tar.gz,jar}; do
             curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Content-Type: $(file -b --mime-type $asset)" --data-binary @$asset "${{ steps.create-release.outputs.upload_url }}=$(basename $asset)"
           done
